@@ -1,0 +1,7 @@
+@font-face {
+    font-family: kbo;
+    font-style: normal;
+    font-weight: 700;
+    src: url('fonts/KBODiaGothic_bold.eot');
+    src: url('fonts/KBODiaGothic_bold.eot?#iefix') format('embedded-opentype'),url('fonts/KBODiaGothic_bold.woff') format('woff')
+}
