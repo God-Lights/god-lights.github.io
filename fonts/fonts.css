@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Apple'; /*font 이름*/
+    font-style: 'normal'; /* font 스타일 정의 (기울임, 일반) */
+    font-weight: 400; /* font 굵기 정의 */
+    /* 브라우저&디바이스 환경에 따른 font 파일 위치 정의 */
+    src: url('SF-Pro.ttf') format('truetype')
+}
+
+.apple{ font-family: Arial, "Apple", serif; }
