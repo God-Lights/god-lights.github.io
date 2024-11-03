@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>mac</title>
+    <link rel="stylesheet" href="../fonts/fonts.css">
+    <style>
+        body {
+            font-family: Arial, "Apple", serif; ;
+            margin: 0;
+            background-color: #f0f0f5;
+        }
+        .browser {
+            width: 800px;
+            height: 600px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            margin: 50px auto;
+            background-color: white;
+            overflow: hidden;
+        }
+        .navbar {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+        }
+        .button {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: none;
+            margin-right: 5px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+        }
+        .close {
+            background-color: #ff5c5c; /* 빨간색 */
+        }
+        .minimize {
+            background-color: #ffbd44; /* 주황색 */
+        }
+        .maximize {
+            background-color: #5cff5c; /* 초록색 */
+        }
+        .url-bar {
+            flex: 1;
+            margin-left: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 5px;
+            font-size: 16px;
+        }
+        .action-button {
+            background-color: #007aff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        .content {
+            overflow-y: auto;
+            align-items: center;
+            background-color:#fff;
+        }
+    </style>
+</head>
+<body style="background-color:rgb(0,255,200)">
+<div id="browse">
+    <div class="navbar">
+        <button class="button close" onclick="go('firstpage.html')"></button>
+        <button class="button minimize"></button>
+        <button class="button maximize"></button>
+        <input id="uri" type="text" class="url-bar" placeholder="URL">
+        <button id="act" class="action-button" onclick="run()">Go</button>
+    </div>
+    <div class="content">
+        <iframe id="web" width="2500px" height="1360px"></iframe>
+    </div>
+</div>
+</body>
+<script src="mac.js"></script>
+</html>
