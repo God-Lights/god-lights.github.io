@@ -5,6 +5,14 @@ ul {
     list-style: none;
 }
 
+li a {
+    color:white;
+}
+
+li a:hover {
+    filter:brightness(50%);
+}
+
 a {
     text-decoration: none;
     outline: none;
@@ -44,4 +52,8 @@ a {
 	height: 100%;
 	display: flex;
 	align-items: center;
+}
+
+header {
+    background-color:black;
 }

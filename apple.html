@@ -8,11 +8,26 @@
     <div class="apple">
         <a href="javascript:window.navigator.clipboard.writeText('\uF8FF')">&#xF8FF;</a>
         <textarea class="apple"></textarea>
-</div>
+    </div>
+    <canvas id="jsCanvas" class="canvas" width="1080px" height="720px"></canvas>
+    <script src="app.js"></script>
 </body>
 <style>
-    html {
+    html, body, .apple {
+        color:white;
+    }
+    a {
+        text-decoration:none;
         cursor : url("cursor/apple.cur"), auto;
+        font-size:50px;
+        color:white;
+    }
+    a:hover {
+        color:aqua;
+    }
+    canvas {
+        cursor : url("cursor/applePencil.cur"), auto;
+        background-color: darkgreen;
     }
 </style>
 </html>

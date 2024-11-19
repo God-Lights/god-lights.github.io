@@ -46,4 +46,9 @@ function fo() {
     var foo = document.getElementById('fo');
     foo.innerHTML = selectTeam().value;
     requestAnimationFrame(fo);
+    if(selectTeam().value == 'WO') {
+        document.body.class = "WO";
+    } else {
+        document.body.class = "";
+    }
 }
