@@ -1,0 +1,43 @@
+gitprof {
+  padding: 5px;
+  text-align: center;
+  border: 2px solid;
+  border-radius:5px;
+  background-color:white;
+  cursor:pointer;
+  &::before {
+    font-family:"Font Awesome 6 Brands";
+    color:black;
+    font-size:25px;
+    content:"\f09b";
+  }
+  &::after {
+    font-family:"Apple", serif;
+    font-size:25px;
+    color:black;
+    content: "Github";
+  }
+  &:hover {
+    &::before, &::after {
+      color:#555555;
+    }
+  }
+  &:active {
+    animation: sparkle 1s infinite alternate;
+  }
+}
+@keyframes sparkle {
+            0% { box-shadow: 0 0 30px rgba(255, 165, 0, 1); }
+            100% { box-shadow: 0 0 10px rgba(255, 165, 0, 0); }
+        }
+@keyframes idle {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-5px); }
+        }
+@font-face {
+    font-family: 'Apple'; /*font 이름*/
+    font-style: 'normal'; /* font 스타일 정의 (기울임, 일반) */
+    font-weight: 400; /* font 굵기 정의 */
+    /* 브라우저&디바이스 환경에 따른 font 파일 위치 정의 */
+    src: url('https://god-lights.github.io/fonts/SF-Pro.ttf') format('truetype')
+}

@@ -52,3 +52,6 @@ function fo() {
         document.body.class = "";
     }
 }
+window.oncontextmenu=function() {
+    return false;
+}
