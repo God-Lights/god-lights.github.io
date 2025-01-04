@@ -6,7 +6,7 @@ ul {
 }
 
 li a {
-    color:white;
+    color:black;
 }
 
 li a:hover {
@@ -54,6 +54,8 @@ a {
 	align-items: center;
 }
 
-header {
-    background-color:black;
+footer {
+    position : absolute;
+    bottom : 0;
+    font-size: 25px;
 }
