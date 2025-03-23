@@ -5,6 +5,42 @@
     <title>ConsoleGL</title>
 </head>
 <body>
-    <h1 onclick="window.location.href = 'https://github.com/God-Lights/ConsoleGL'">ConsoleGL</h1>
+<h1 id="consolegl-v0-1-0a-25y33b-" onclick="window.location.href = 'https://github.com/God-Lights/ConsoleGL'">ConsoleGL v0.1.0a(25y33b)</h1>
+<p>This is Command Console.</p>
+<h2 id="run-console">Run Console</h2>
+<h4 id="run-bat">run.bat</h4>
+<pre><code class="lang-batch">    @echo off
+    cls
+    java -jar &lt;File&gt; nogui
+    <span class="hljs-keyword">exit</span>
+</code></pre>
+<h2 id="add-command-after-v0-1-1a-">Add Command(after v0.1.1a)</h2>
+<p>in source code,</p>
+<h4 id="src-net-godlights-edshin-java-console-cmd-commandtest-java">src/net/godlights/edshin/java/console/cmd/CommandTest.java</h4>
+<pre><code class="lang-java">    <span class="hljs-keyword">package</span> net.godlights.edshin.java.console.cmd;
+
+    <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CommandTest</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">CmdExecutor</span></span>{
+        <span class="hljs-meta">@Override</span>
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">onCmd</span><span class="hljs-params">(String[] args)</span> </span>{
+            <span class="hljs-comment">//code</span>
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;
+        }
+    }
+</code></pre>
+<p>and write in console</p>
+<pre><code class="lang-console">    &gt; cmd <span class="hljs-tag">&lt;<span class="hljs-name">CommandName</span>&gt;</span>
+
+    &gt; <span class="hljs-tag">&lt;<span class="hljs-name">CommandName</span>&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">..args</span>&gt;</span>
+</code></pre>
+
 </body>
+<style>
+    pre {
+        border: 2px solid #777;
+        border-radius:5px;
+        padding: 30px;
+        background-color: #000000;
+        color: white;
+    }
+</style>
 </html>
