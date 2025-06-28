@@ -1,0 +1,21 @@
+body {
+  font-size: 20px;
+}
+
+.script {
+  height: 20;
+  display: inline-block;
+}
+
+.flag {
+  border: 1px solid gray;
+  vertical-align: middle;
+}
+
+.country {
+}
+
+.linkedtext {
+  text-decoration: none;
+  color: #E7C300;
+}
