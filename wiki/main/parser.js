@@ -132,7 +132,7 @@ function countryName(code) {
 }
 
 function dualCountry(c1, c2) {
-  const dualc = " (<a class='linkedtext' href='https://god-lights.github.io/wiki/dualnationality'>복수국적</a>)"
+  const dualc = " (<a class='linkedtext' href='https://god-lights.github.io/wiki/documents/dualnationality'>복수국적</a>)"
   const linemaker = "<a style='color:#ddd;'> | </a>"
   return countryName(c1)+linemaker+countryName(c2)+dualc
 }
