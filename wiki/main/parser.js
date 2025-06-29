@@ -28,12 +28,12 @@ function parseCustomTags(text) {
         const height = actio.height ? "height='"+actio.height+"'" : "";
         return getImage(src, width, height)
       case "link":
-        const link = coconut[1]
-        const show = corret[1] || "";
+        const link = "../documents/"+coconut[1]
+        const show = corret[1] || coconut[1];
         return linkMaker(link,show)
       default:
         const links = corret[0]
-        const shows = corret[1]
+        const shows = corret[1] || links
         return linkMaker(links,shows)
 
     }
