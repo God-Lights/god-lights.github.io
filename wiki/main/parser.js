@@ -114,7 +114,21 @@ function countryName(code) {
     SCC: "고성",
     SBR: "신야"
   };
-  return "<a class='linkedtext country' href='https://god-lights.github.io/wiki/country/"+code.toUpperCase()+".html'>"+flag(code.toUpperCase())+" "+countries[code.toUpperCase()]+"</a>" || "[알 수 없는 국가]";
+  const country = {
+    US: "United States of America",
+    KR: "Republic of Korea",
+    JP: "Japan",
+    CN: "China",
+    FR: "France",
+    DE: "Germany",
+    UK: "United Kingdom",
+    IT: "Italy",
+    CA: "Canada",
+    AU: "Australia",
+    SCC: "United States of Central Chrime",
+    SBR: "Sabrot"
+  };
+  return "<a class='linkedtext country' href='https://god-lights.github.io/wiki/documents/"+country[code.toUpperCase()]+"'>"+flag(code.toUpperCase())+" "+countries[code.toUpperCase()]+"</a>" || "[알 수 없는 국가]";
 }
 
 function dualCountry(c1, c2) {
