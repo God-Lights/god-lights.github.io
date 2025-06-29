@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Wiki Textarea Downloader</title>
+</head>
+<body>
+  <h2>코드를 입력하세요:</h2>
+  <textarea id="codeInput" rows="15" cols="80" placeholder="여기에 코드를 입력하세요..."></textarea><br><br>
+  <button onclick="downloadCode()">다운로드</button>
+
+  <script>
+    function downloadCode() {
+      const code = document.getElementById('codeInput').value;
+
+      // 날짜 포맷: YYYY-MM-DD
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const day = String(today.getDate()).padStart(2, '0');
+      const formattedDate = `${year}-${month}-${day}`;
+
+      const filename = `wiki(${formattedDate}).txt`;
+
+      const blob = new Blob([code], { type: 'text/plain' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+      link.click();
+
+      URL.revokeObjectURL(link.href);  // 메모리 해제
+    }
+  </script>
+</body>
+</html>
