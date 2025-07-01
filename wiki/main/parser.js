@@ -61,6 +61,9 @@ function processScript(params) {
       return setDday(params.date);
     case "dualnty":
       return dualCountry(params.c1,params.c2);
+    case "redirect":
+	    window.location.href = params.link || "about:blank"
+	    return "redirect: "+params.link
     default:
       return "[지원되지 않는 타입]";
   }
