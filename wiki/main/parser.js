@@ -154,7 +154,7 @@ function linkMaker(link, show) {
 function partyMaker(link) {
   const parties = {
     LPA: {
-        href: "Liberal Party of Amestria",
+        href: "../documents/Liberal Party of Amestria",
         style: "display: inline;padding: 2px 4px;border-radius: 3px;word-break: keep-all;background: #0077FF;color: white;font-weight: bold;font-size: 0.9em;text-decoration: none;",
         show: "자유당"
     }
