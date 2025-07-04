@@ -22,7 +22,7 @@ function parseCustomTags(text) {
     const coconut = corret[0].split(":")
     switch(coconut[0]) {
       case "image":
-        const actio = parseParams(corret[1])
+        const actio = parseParams(corret[1]);
         const src = "../image/"+coconut[1] || "";
         const width = actio.width ? "width='"+actio.width+"'" : "";
         const height = actio.height ? "height='"+actio.height+"'" : "";
