@@ -31,6 +31,9 @@ function parseCustomTags(text) {
         const link = "../documents/"+coconut[1]
         const show = corret[1] || coconut[1];
         return linkMaker(link,show)
+      case "party":
+        const linked = coconut[1]
+        return partyMaker(linked);
       default:
         const links = corret[0]
         const shows = corret[1] || links
@@ -146,4 +149,15 @@ function getImage(src, width, height) {
 
 function linkMaker(link, show) {
   return `<a class="linkedtext" href="${link}">${show}</a>`
+}
+
+function partyMaker(link) {
+  const parties = {
+    LPA: {
+        href: "Liberal Party of Amestria",
+        style: "display: inline;padding: 2px 4px;border-radius: 3px;word-break: keep-all;background: #0077FF;color: white;font-weight: bold;font-size: 0.9em;text-decoration: none;",
+        show: "자유당"
+    }
+  }
+  return `<a href="${parties[link.toUpperCase()].href}" style="${parties[link.toUpperCase()].style}">${parties[link.toUpperCase()].show}</a>`
 }
