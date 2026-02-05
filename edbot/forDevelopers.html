@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>에드봇 개발자들을 위한 가이드</title>
+        <link rel="stylesheet" href="prism.css" />
+        <script src="prism.js"></script>
+    </head>
+    <body>
+        <h2 id="-">에드봇 설치하기</h2>
+<p>준비물: 메신저봇R이 설치된 안드로이드 폰, <a href="download/data.zip" download>봇 데이터코드(data.zip)</a> <a href="./download/bot.js" download>bot.js 코드</a><br></p>
+<p>data.zip을 압축 해제해주신 다음, 아래와 같은 경로로 세팅해주세요!</p>
+<pre><code class="language-bash">
+/sdcard/edbot
+├───config.json
+│   
+└───data
+    ├───items.json
+    ├───monsters.json
+    └───shop.json
+</code></pre>
+<p>그 다음, 메신저봇에서 봇을 만들어줍니다(이름은 상관 없습니다!). 그러고 수정버튼을 누른 후, bot.js에 있는 전체 코드를 메신저봇R에 붙여넣기해줍니다.</p>
+        config.json
+        <pre><code class="lang-json">
+            {
+                "admins": [...],
+                "root": {...},
+                "system": {...},
+                "loot": {...},
+                "medal": {...}
+            }
+        </code></pre>
+    </body>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+    </style>
+</html>
