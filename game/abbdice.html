@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ABB Dice | Two-Player-Three-Dice</title>
+  <style>
+    :root{
+      --bg:#0d1020;
+      --panel:#171b33;
+      --panel2:#202542;
+      --line:#303858;
+      --text:#f5f7ff;
+      --muted:#aeb7d9;
+      --alpha:#6ee7ff;
+      --beta:#ffb86b;
+      --base:#b7ff6e;
+      --danger:#ff6b8a;
+      --ok:#81f29a;
+      --shadow:0 18px 45px rgba(0,0,0,.35);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 20% 10%, rgba(110,231,255,.18), transparent 28%),
+        radial-gradient(circle at 85% 18%, rgba(255,184,107,.15), transparent 26%),
+        linear-gradient(135deg,#090b15,#11162d 54%,#090b15);
+    }
+    button,input,select{font:inherit}
+    .wrap{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:30px 0 46px}
+    header{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:20px;
+      margin-bottom:22px;
+    }
+    .brand h1{margin:0;font-size:clamp(34px,6vw,74px);letter-spacing:-.06em;line-height:.92}
+    .brand p{margin:10px 0 0;color:var(--muted);font-weight:700}
+    .badge{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+      padding:10px 14px;
+      border-radius:999px;
+      color:var(--muted);
+      white-space:nowrap;
+      font-size:14px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:1.35fr .9fr;
+      gap:18px;
+    }
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.04));
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .card-inner{padding:22px}
+    .topline{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:16px;
+    }
+    h2{font-size:18px;margin:0;letter-spacing:-.02em}
+    .muted{color:var(--muted)}
+    .dice-area{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+      margin:18px 0 18px;
+    }
+    .diebox{
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.18);
+      border-radius:20px;
+      padding:14px;
+      min-height:164px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      position:relative;
+    }
+    .label{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:13px;font-weight:800}
+    .label strong{color:var(--text)}
+    .die{
+      width:86px;height:86px;
+      border-radius:20px;
+      margin:12px auto 4px;
+      background:linear-gradient(145deg,#fff,#d7def5);
+      color:#11162d;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      grid-template-rows:repeat(3,1fr);
+      padding:12px;
+      box-shadow:inset -4px -4px 8px rgba(0,0,0,.12),0 12px 24px rgba(0,0,0,.24);
+    }
+    .pip{
+      width:13px;height:13px;
+      border-radius:50%;
+      background:#12172a;
+      align-self:center;
+      justify-self:center;
+      opacity:0;
+    }
+    .die[data-v="1"] .p5,
+    .die[data-v="2"] .p1,.die[data-v="2"] .p9,
+    .die[data-v="3"] .p1,.die[data-v="3"] .p5,.die[data-v="3"] .p9,
+    .die[data-v="4"] .p1,.die[data-v="4"] .p3,.die[data-v="4"] .p7,.die[data-v="4"] .p9,
+    .die[data-v="5"] .p1,.die[data-v="5"] .p3,.die[data-v="5"] .p5,.die[data-v="5"] .p7,.die[data-v="5"] .p9,
+    .die[data-v="6"] .p1,.die[data-v="6"] .p3,.die[data-v="6"] .p4,.die[data-v="6"] .p6,.die[data-v="6"] .p7,.die[data-v="6"] .p9{opacity:1}
+    .alpha{box-shadow:0 0 0 1px rgba(110,231,255,.18) inset}
+    .beta{box-shadow:0 0 0 1px rgba(255,184,107,.18) inset}
+    .base{box-shadow:0 0 0 1px rgba(183,255,110,.18) inset}
+    .alpha .tag{color:var(--alpha)}
+    .beta .tag{color:var(--beta)}
+    .base .tag{color:var(--base)}
+    .result{
+      background:rgba(0,0,0,.22);
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:18px;
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:14px;
+      align-items:center;
+    }
+    .winner{
+      font-size:clamp(25px,4vw,42px);
+      font-weight:950;
+      letter-spacing:-.05em;
+      margin:0;
+    }
+    .reason{margin:4px 0 0;color:var(--muted);line-height:1.5}
+    .payout-pill{
+      border-radius:18px;
+      padding:12px 16px;
+      background:rgba(255,255,255,.08);
+      text-align:right;
+      min-width:118px;
+    }
+    .payout-pill b{font-size:26px}
+    .controls{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:16px;
+    }
+    .field{
+      background:rgba(0,0,0,.18);
+      border:1px solid var(--line);
+      padding:12px;
+      border-radius:16px;
+    }
+    .field label{display:block;font-size:12px;color:var(--muted);font-weight:800;margin-bottom:8px}
+    .field input,.field select{
+      width:100%;
+      border:0;
+      outline:0;
+      color:var(--text);
+      background:transparent;
+      font-size:20px;
+      font-weight:900;
+    }
+    .actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+    .btn{
+      border:0;
+      border-radius:16px;
+      padding:13px 16px;
+      font-weight:950;
+      color:#0c1020;
+      cursor:pointer;
+      background:linear-gradient(135deg,var(--alpha),var(--base));
+      box-shadow:0 12px 28px rgba(110,231,255,.14);
+    }
+    .btn.secondary{background:rgba(255,255,255,.09);color:var(--text);border:1px solid var(--line);box-shadow:none}
+    .btn.danger{background:rgba(255,107,138,.12);color:var(--danger);border:1px solid rgba(255,107,138,.35);box-shadow:none}
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+      margin-bottom:16px;
+    }
+    .stat{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+      background:rgba(0,0,0,.16);
+    }
+    .stat small{display:block;color:var(--muted);font-weight:800}
+    .stat b{font-size:24px}
+    .payout-table{width:100%;border-collapse:separate;border-spacing:0 8px}
+    .payout-table th{font-size:12px;color:var(--muted);text-align:left;padding:0 8px}
+    .payout-table td{
+      background:rgba(0,0,0,.18);
+      border-top:1px solid var(--line);
+      border-bottom:1px solid var(--line);
+      padding:10px 8px;
+    }
+    .payout-table td:first-child{border-left:1px solid var(--line);border-radius:12px 0 0 12px;font-weight:950}
+    .payout-table td:last-child{border-right:1px solid var(--line);border-radius:0 12px 12px 0}
+    .payout-table input{
+      width:76px;
+      background:transparent;
+      border:0;
+      outline:0;
+      color:var(--text);
+      font-weight:900;
+      text-align:right;
+    }
+    .hint{
+      margin:12px 0 0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.55;
+    }
+    .log{
+      max-height:260px;
+      overflow:auto;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      padding-right:4px;
+    }
+    .log-item{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:10px 12px;
+      background:rgba(0,0,0,.14);
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
+    }
+    .log-item b{color:var(--text)}
+    .rules{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+    }
+    .rule{
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.14);
+      border-radius:18px;
+      padding:14px;
+      line-height:1.5;
+      color:var(--muted);
+      font-size:14px;
+    }
+    .rule b{color:var(--text)}
+    .flash{animation:flash .32s ease-in-out 4}
+    @keyframes flash{50%{transform:translateY(-4px) rotate(2deg);filter:brightness(1.3)}}
+    footer{margin-top:18px;color:var(--muted);font-size:12px;text-align:center}
+    @media(max-width:860px){
+      header{display:block}
+      .badge{display:inline-block;margin-top:14px}
+      .grid{grid-template-columns:1fr}
+      .dice-area,.rules{grid-template-columns:1fr}
+      .controls,.stats{grid-template-columns:1fr}
+      .result{grid-template-columns:1fr}
+      .payout-pill{text-align:left}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <h1>ABB Dice</h1>
+        <p>Two-Player-Three-Dice · Alpha / Beta / Base</p>
+      </div>
+      <div class="badge">단일 HTML · Cloudflare Pages 배포용 · 포인트 시뮬레이터</div>
+    </header>
+
+    <main class="grid">
+      <section class="card">
+        <div class="card-inner">
+          <div class="topline">
+            <h2>게임 보드</h2>
+            <span class="muted">B가 가까운 쪽이 승리</span>
+          </div>
+
+          <div class="dice-area">
+            <div class="diebox alpha" id="boxAlpha">
+              <div class="label"><strong>퍼스트 다이스</strong><span class="tag">ALPHA</span></div>
+              <div class="die" id="dieAlpha" data-v="1"></div>
+              <div class="muted">Player A</div>
+            </div>
+            <div class="diebox beta" id="boxBeta">
+              <div class="label"><strong>라스트 다이스</strong><span class="tag">BETA</span></div>
+              <div class="die" id="dieBeta" data-v="6"></div>
+              <div class="muted">Player B</div>
+            </div>
+            <div class="diebox base" id="boxBase">
+              <div class="label"><strong>베이스 다이스</strong><span class="tag">BASE</span></div>
+              <div class="die" id="dieBase" data-v="4"></div>
+              <div class="muted">Multiplier</div>
+            </div>
+          </div>
+
+          <div class="result">
+            <div>
+              <p class="winner" id="winnerText">대기 중</p>
+              <p class="reason" id="reasonText">베팅 방향과 포인트를 정한 뒤 ROLL을 누르세요.</p>
+            </div>
+            <div class="payout-pill">
+              <span class="muted">이번 B 배수</span><br>
+              <b id="payoutText">-</b>
+            </div>
+          </div>
+
+          <div class="controls">
+            <div class="field">
+              <label for="side">내 베팅 방향</label>
+              <select id="side">
+                <option value="ALPHA">ALPHA</option>
+                <option value="BETA">BETA</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="bet">베팅 포인트</label>
+              <input id="bet" type="number" min="1" step="1" value="100" />
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn" id="rollBtn">ROLL ABB DICE</button>
+            <button class="btn secondary" id="autoBtn">100회 자동 시뮬레이션</button>
+            <button class="btn danger" id="resetBtn">초기화</button>
+          </div>
+
+          <div class="rules">
+            <div class="rule"><b>기본 규칙</b><br>B가 Alpha와 Beta 중 더 가까운 숫자 쪽이 승리합니다.</div>
+            <div class="rule"><b>간격 동률</b><br>1~3 / 4~6 구간으로 나뉘면 B가 속한 구간의 주사위가 승리합니다. 1-2-3은 1, 4-5-6은 6이 승리합니다.</div>
+            <div class="rule"><b>같은 숫자</b><br>Alpha와 Beta가 같으면 Alpha는 1~3, Beta는 4~6 대표로 보고 B 구간에 따라 승리합니다.</div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="card">
+        <div class="card-inner">
+          <div class="topline">
+            <h2>포인트 & 배당</h2>
+            <span class="muted">원금 반환 + 순수익 배수</span>
+          </div>
+
+          <div class="stats">
+            <div class="stat"><small>보유 포인트</small><b id="bankroll">10,000</b></div>
+            <div class="stat"><small>라운드</small><b id="rounds">0</b></div>
+            <div class="stat"><small>승률</small><b id="winRate">0%</b></div>
+          </div>
+
+          <table class="payout-table">
+            <thead>
+              <tr><th>B</th><th>의미</th><th>배수</th></tr>
+            </thead>
+            <tbody id="payoutRows"></tbody>
+          </table>
+
+          <p class="hint">
+            기본 배당은 하우스 엣지 약 5% 기준입니다.
+            공정 배당으로 바꾸려면 1=1.20, 2=1.00, 3=0.80, 4=0.80, 5=1.00, 6=1.20으로 입력하세요.
+          </p>
+
+          <div class="actions">
+            <button class="btn secondary" id="fairBtn">공정 배당</button>
+            <button class="btn secondary" id="houseBtn">하우스 5%</button>
+          </div>
+
+          <h2 style="margin-top:20px;margin-bottom:10px;">게임 로그</h2>
+          <div class="log" id="log"></div>
+        </div>
+      </aside>
+    </main>
+
+    <footer>
+      ABB Dice는 게임 규칙 검증용 포인트 시뮬레이터입니다. 실제 현금 베팅/결제 기능은 포함되어 있지 않습니다.
+    </footer>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    const state = {
+      bankroll: Number(localStorage.getItem("abb_bankroll") || 10000),
+      rounds: Number(localStorage.getItem("abb_rounds") || 0),
+      wins: Number(localStorage.getItem("abb_wins") || 0),
+      payouts: JSON.parse(localStorage.getItem("abb_payouts") || "[1.08,0.90,0.72,0.72,0.90,1.08]")
+    };
+
+    const fairPayouts = [1.20, 1.00, 0.80, 0.80, 1.00, 1.20];
+    const housePayouts = [1.08, 0.90, 0.72, 0.72, 0.90, 1.08];
+
+    function fillPips(el){
+      el.innerHTML = "";
+      for(let i=1;i<=9;i++){
+        const p = document.createElement("span");
+        p.className = "pip p" + i;
+        el.appendChild(p);
+      }
+    }
+
+    ["dieAlpha","dieBeta","dieBase"].forEach(id => fillPips($(id)));
+
+    function randDie(){
+      const a = new Uint32Array(1);
+      crypto.getRandomValues(a);
+      return (a[0] % 6) + 1;
+    }
+
+    function sideOfValue(v){
+      return v <= 3 ? "LOW" : "HIGH";
+    }
+
+    function sideName(s){
+      return s === "ALPHA" ? "Alpha" : "Beta";
+    }
+
+    function judge(alpha, beta, base){
+      if(alpha === beta){
+        const winner = base <= 3 ? "ALPHA" : "BETA";
+        return {
+          winner,
+          reason:`Alpha와 Beta가 같은 숫자(${alpha})입니다. B=${base}는 ${base<=3 ? "1~3" : "4~6"} 구간이므로 ${sideName(winner)} 승리.`
+        };
+      }
+
+      const da = Math.abs(base - alpha);
+      const db = Math.abs(base - beta);
+
+      if(da < db){
+        return { winner:"ALPHA", reason:`B=${base}가 Alpha ${alpha}에 더 가깝습니다. 거리 ${da} vs ${db}.` };
+      }
+      if(db < da){
+        return { winner:"BETA", reason:`B=${base}가 Beta ${beta}에 더 가깝습니다. 거리 ${db} vs ${da}.` };
+      }
+
+      const values = [alpha, beta].sort((a,b)=>a-b);
+
+      if(values[0] === 1 && values[1] === 3 && base === 2){
+        const winner = alpha === 1 ? "ALPHA" : "BETA";
+        return { winner, reason:"1-2(B)-3 구조입니다. 끝값 보정 규칙에 따라 1이 승리합니다." };
+      }
+
+      if(values[0] === 4 && values[1] === 6 && base === 5){
+        const winner = alpha === 6 ? "ALPHA" : "BETA";
+        return { winner, reason:"4-5(B)-6 구조입니다. 끝값 보정 규칙에 따라 6이 승리합니다." };
+      }
+
+      const baseZone = sideOfValue(base);
+      const alphaZone = sideOfValue(alpha);
+      const betaZone = sideOfValue(beta);
+
+      if(alphaZone !== betaZone){
+        const winner = alphaZone === baseZone ? "ALPHA" : "BETA";
+        return {
+          winner,
+          reason:`간격이 같습니다. B=${base}는 ${baseZone==="LOW" ? "1~3" : "4~6"} 구간이므로 같은 구간의 ${sideName(winner)} 승리.`
+        };
+      }
+
+      return { winner:"ALPHA", reason:"예외 처리되지 않은 동률입니다. 규칙 확인이 필요합니다." };
+    }
+
+    function setDice(alpha,beta,base){
+      $("dieAlpha").dataset.v = alpha;
+      $("dieBeta").dataset.v = beta;
+      $("dieBase").dataset.v = base;
+    }
+
+    function fmt(n){
+      return Math.round(n).toLocaleString("ko-KR");
+    }
+
+    function save(){
+      localStorage.setItem("abb_bankroll", state.bankroll);
+      localStorage.setItem("abb_rounds", state.rounds);
+      localStorage.setItem("abb_wins", state.wins);
+      localStorage.setItem("abb_payouts", JSON.stringify(state.payouts));
+    }
+
+    function renderStats(){
+      $("bankroll").textContent = fmt(state.bankroll);
+      $("rounds").textContent = state.rounds.toLocaleString("ko-KR");
+      $("winRate").textContent = state.rounds ? Math.round((state.wins/state.rounds)*100) + "%" : "0%";
+    }
+
+    function renderPayoutRows(){
+      const names = ["끝값 고배당","보통","중심 저배당","중심 저배당","보통","끝값 고배당"];
+      $("payoutRows").innerHTML = state.payouts.map((v,i)=>`
+        <tr>
+          <td>${i+1}</td>
+          <td class="muted">${names[i]}</td>
+          <td><input data-payout="${i}" type="number" min="0" step="0.01" value="${Number(v).toFixed(2)}"> 배</td>
+        </tr>
+      `).join("");
+
+      document.querySelectorAll("[data-payout]").forEach(input=>{
+        input.addEventListener("change", e=>{
+          const idx = Number(e.target.dataset.payout);
+          const val = Math.max(0, Number(e.target.value || 0));
+          state.payouts[idx] = val;
+          e.target.value = val.toFixed(2);
+          save();
+        });
+      });
+    }
+
+    function renderAll(){
+      renderStats();
+      renderPayoutRows();
+    }
+
+    function addLog(text){
+      const div = document.createElement("div");
+      div.className = "log-item";
+      div.innerHTML = text;
+      $("log").prepend(div);
+      while($("log").children.length > 50) $("log").lastChild.remove();
+    }
+
+    function flashDice(){
+      ["boxAlpha","boxBeta","boxBase"].forEach(id=>{
+        const el = $(id);
+        el.classList.remove("flash");
+        void el.offsetWidth;
+        el.classList.add("flash");
+      });
+    }
+
+    function playRound(silent=false){
+      const bet = Math.floor(Number($("bet").value || 0));
+      const chosen = $("side").value;
+
+      if(!bet || bet < 1){
+        alert("베팅 포인트를 1 이상 입력하세요.");
+        return;
+      }
+      if(state.bankroll < bet){
+        alert("보유 포인트가 부족합니다.");
+        return;
+      }
+
+      const alpha = randDie();
+      const beta = randDie();
+      const base = randDie();
+      const result = judge(alpha,beta,base);
+      const payout = Number(state.payouts[base-1]);
+      const won = chosen === result.winner;
+
+      state.rounds += 1;
+
+      let delta;
+      if(won){
+        state.wins += 1;
+        delta = bet * payout;
+        state.bankroll += delta;
+      }else{
+        delta = -bet;
+        state.bankroll += delta;
+      }
+
+      setDice(alpha,beta,base);
+      $("winnerText").textContent = `${sideName(result.winner)} 승리`;
+      $("winnerText").style.color = result.winner === "ALPHA" ? "var(--alpha)" : "var(--beta)";
+      $("reasonText").textContent = result.reason;
+      $("payoutText").textContent = payout.toFixed(2) + "배";
+
+      if(!silent){
+        flashDice();
+        addLog(
+          `<b>#${state.rounds}</b> A:${alpha} / BETA:${beta} / BASE:${base} · ` +
+          `<b>${sideName(result.winner)} 승</b> · 내 선택 ${sideName(chosen)} · ` +
+          `${won ? `<span style="color:var(--ok)">+${fmt(delta)}</span>` : `<span style="color:var(--danger)">${fmt(delta)}</span>`}`
+        );
+      }
+
+      save();
+      renderStats();
+    }
+
+    $("rollBtn").addEventListener("click", () => playRound(false));
+
+    $("autoBtn").addEventListener("click", () => {
+      for(let i=0;i<100;i++){
+        if(state.bankroll < Number($("bet").value || 0)) break;
+        playRound(true);
+      }
+      addLog(`<b>자동 시뮬레이션 100회 실행</b> · 현재 포인트 ${fmt(state.bankroll)}`);
+      renderStats();
+    });
+
+    $("resetBtn").addEventListener("click", () => {
+      if(!confirm("포인트와 기록을 초기화할까요?")) return;
+      state.bankroll = 10000;
+      state.rounds = 0;
+      state.wins = 0;
+      $("log").innerHTML = "";
+      $("winnerText").textContent = "대기 중";
+      $("winnerText").style.color = "var(--text)";
+      $("reasonText").textContent = "베팅 방향과 포인트를 정한 뒤 ROLL을 누르세요.";
+      $("payoutText").textContent = "-";
+      setDice(1,6,4);
+      save();
+      renderStats();
+    });
+
+    $("fairBtn").addEventListener("click", () => {
+      state.payouts = [...fairPayouts];
+      save();
+      renderPayoutRows();
+      addLog("<b>공정 배당</b>으로 변경했습니다. 이론상 하우스 엣지 0%입니다.");
+    });
+
+    $("houseBtn").addEventListener("click", () => {
+      state.payouts = [...housePayouts];
+      save();
+      renderPayoutRows();
+      addLog("<b>하우스 5%</b> 배당으로 변경했습니다. 장기 기대값 기준 약 -5%입니다.");
+    });
+
+    renderAll();
+  </script>
+</body>
+</html>
